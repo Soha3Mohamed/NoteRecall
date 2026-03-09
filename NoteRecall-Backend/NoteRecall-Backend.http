@@ -1,0 +1,6 @@
+@NoteRecall_Backend_HostAddress = http://localhost:5130
+
+GET {{NoteRecall_Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

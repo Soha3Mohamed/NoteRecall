@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/Docs/">
+    <File Path="progressTracker.md" />
+    <File Path="TechnicalDraft.md" />
+  </Folder>
+  <Project Path="NoteRecall-Application/NoteRecall-Application.csproj" />
+  <Project Path="NoteRecall-Backend/NoteRecall-Api.csproj" />
+  <Project Path="NoteRecall-Core/NoteRecall-Core.csproj" />
+  <Project Path="NoteRecall-Infrastructure/NoteRecall-Infrastructure.csproj" />
+</Solution>
