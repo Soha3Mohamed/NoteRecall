@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NoteRecall_Core.Interfaces
 {
-    internal interface IReviewSessionRepository
+    public interface IReviewSessionRepository
     {
         Task<ReviewSession> GetByIdAsync(int id);
         Task<IEnumerable<ReviewSession>> GetByUserIdAsync(int userId);

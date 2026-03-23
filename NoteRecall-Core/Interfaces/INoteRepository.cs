@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NoteRecall_Core.Interfaces
 {
-    internal interface INoteRepository
+    public interface INoteRepository
     {
         Task<Note?> GetByIdAsync(int id);
         Task<IEnumerable<Note>> GetByUserIdAsync(int userId);

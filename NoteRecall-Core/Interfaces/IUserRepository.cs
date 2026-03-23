@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NoteRecall_Core.Interfaces
 {
-    internal interface IUserRepository
+    public interface IUserRepository
     {
         Task<User?> GetByEmailAsync(string email);
         Task<User?> GetByIdAsync(int id);

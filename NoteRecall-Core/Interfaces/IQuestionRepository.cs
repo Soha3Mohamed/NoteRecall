@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NoteRecall_Core.Interfaces
 {
-    internal interface IQuestionRepository
+    public interface IQuestionRepository
     {
         Task<Question> GetQuestionByIdAsync(int questionId);
         Task<List<Question>> GetQuestionsByNoteIdAsync(int noteId);

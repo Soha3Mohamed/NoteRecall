@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NoteRecall_Core.Entities
 {
-    internal class Question
+    public class Question
     {
         //this question is for spaced repetition, so it will have a question text, an expected answer text, a next review date, a repetition count, an ease factor, and an interval in days
         //the next review date will be calculated based on the repetition count, the ease factor, and the interval in days

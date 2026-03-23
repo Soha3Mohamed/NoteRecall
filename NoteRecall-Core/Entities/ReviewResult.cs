@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NoteRecall_Core.Entities
 {
-    internal class ReviewResult
+    public class ReviewResult
     {
         public int Id { get; set; }
         public int QuestionId { get; set; }
