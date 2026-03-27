@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NoteRecall_Core.Common
 {
-    internal class ServiceResult<T>
+    public class ServiceResult<T>
     {
         public bool Success { get; set; }
         public string? ErrorMessage { get;}

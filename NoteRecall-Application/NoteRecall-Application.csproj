@@ -7,4 +7,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\" />
+    <Folder Include="ServiceImplementation\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NoteRecall-Core\NoteRecall-Core.csproj" />
+  </ItemGroup>
+
 </Project>
