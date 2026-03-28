@@ -16,9 +16,9 @@ namespace NoteRecall_Application.ServiceInterfaces
         Task<ServiceResult<UserResponseDTO>> UpdateUserAsync(int id, UserUpdateDTO userRequest);
         Task<ServiceResult<bool>> DeleteUserAsync(int id);
 
-        Task<ServiceResult<UserResponseDTO>> AuthenticateUserAsync(string email, string password);
+        Task<ServiceResult<string>> AuthenticateUserAsync(string email, string password);
 
-        Task<ServiceResult<bool>> ChangePasswordAsync(int userId, string currentPassword, string newPassword);
-        Task<ServiceResult<bool>> ResetPasswordAsync(string email);
+        Task<ServiceResult<string>> ChangePasswordAsync(int userId, string currentPassword, string newPassword);
+       
     }
 }

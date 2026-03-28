@@ -1,7 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using NoteRecall_Infrastructure.Contexts;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+#region Adding Serilog
+//adding Serilog configuration
+Log.Logger = new LoggerConfiguration()
+             .MinimumLevel.Information()
+             .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+             .Enrich.FromLogContext()
+             .WriteTo.Console()
+             .WriteTo.File(new Serilog.Formatting.Json.JsonFormatter(), "logs/log.json", rollingInterval: RollingInterval.Day)
+             .WriteTo.Seq("http://localhost:5341") // Example Seq server URL
+             .CreateLogger();
+
+builder.Host.UseSerilog(); //instead of the default logger
+#endregion
 
 // Add services to the container.
 
@@ -24,6 +39,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseSerilogRequestLogging(); // logs HTTP requests
 
 app.UseAuthorization();
 
