@@ -9,10 +9,10 @@ namespace NoteRecall_Application.ServiceInterfaces
 {
     public interface IReviewSessionService
     {
-        Task<ServiceResult<ReviewSessionResponseDTO>> GetQuestionByIdAsync(int reviewSessionId);
-        Task<ServiceResult<IEnumerable<ReviewSessionResponseDTO>>> GetQuestionsByUserIdAsync(int userId);
-        Task<ServiceResult<ReviewSessionResponseDTO>> AddReviewSessionAsync(ReviewSessionRequestDTO reviewSessionRequest);
-        Task<ServiceResult<ReviewSessionResponseDTO>> UpdateReviewSessionRequestAsync(ReviewSessionRequestDTO reviewSessionRequest);
-        Task<ServiceResult<bool>> DeleteReviewSessionRequestAsync(int reviewSessionId);
+        Task<ServiceResult<ReviewSessionResponseDTO>> GetReviewSessionByIdAsync(int reviewSessionId);
+        Task<ServiceResult<IEnumerable<ReviewSessionResponseDTO>>> GetReviewSessionsByUserIdAsync(int userId);
+        //Task<ServiceResult<ReviewSessionResponseDTO>> AddReviewSessionAsync(ReviewSessionRequestDTO reviewSessionRequest);
+        //Task<ServiceResult<ReviewSessionResponseDTO>> UpdateReviewSessionRequestAsync(ReviewSessionRequestDTO reviewSessionRequest);
+        //Task<ServiceResult<bool>> DeleteReviewSessionRequestAsync(int reviewSessionId);
     }
 }

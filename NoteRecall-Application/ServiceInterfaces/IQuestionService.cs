@@ -10,9 +10,9 @@ namespace NoteRecall_Application.ServiceInterfaces
     {
         Task<ServiceResult<QuestionResponseDTO>> GetQuestionByIdAsync(int questionId);
         Task<ServiceResult<IEnumerable<QuestionResponseDTO>>> GetQuestionsByNoteIdAsync(int noteId);
-        Task<ServiceResult<QuestionResponseDTO>> AddQuestionAsync(int noteId, QuestionRequestDTO questionRequest);
-        Task<ServiceResult<QuestionResponseDTO>> UpdateQuestionAsync(int noteId, QuestionUpdateDTO questionUpdate);
-        Task<ServiceResult<bool>> DeleteQuestionAsync(int noteId, int questionId);
+        //Task<ServiceResult<QuestionResponseDTO>> AddQuestionAsync(int noteId, QuestionRequestDTO questionRequest);
+        //Task<ServiceResult<QuestionResponseDTO>> UpdateQuestionAsync(int noteId, QuestionUpdateDTO questionUpdate);
+        //Task<ServiceResult<bool>> DeleteQuestionAsync(int noteId, int questionId);
 
     }
 }

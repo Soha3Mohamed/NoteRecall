@@ -11,10 +11,10 @@ namespace NoteRecall_Application.ServiceInterfaces
     public interface INoteService 
     {
         Task<ServiceResult<NoteResponseDTO>> GetNoteByIdAsync(int id);
-        Task<ServiceResult<IEnumerable<NoteResponseDTO>>> GetNoteByUserIdAsync(int userId);
+        Task<ServiceResult<IEnumerable<NoteResponseDTO>>> GetNotesByUserIdAsync(int userId);
         Task<ServiceResult<NoteResponseDTO>> AddNoteAsync(int userId, NoteRequestDTO noteRequest);
         Task<ServiceResult<NoteResponseDTO>> UpdateNoteAsync(int userId, NoteUpdateDTO noteRequest);
-        Task<ServiceResult<bool>> DeleteNoteAsync(int id);
+        Task<ServiceResult<bool>> DeleteNoteAsync(int id, int userId);
 
     }
 }
