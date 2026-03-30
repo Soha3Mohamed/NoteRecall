@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
-
 namespace NoteRecall_Application.ServiceImplementation
 {
     internal class NoteService : INoteService
@@ -18,6 +17,7 @@ namespace NoteRecall_Application.ServiceImplementation
         private readonly INoteRepository _noteRepository;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
+        private readonly IQuestionGenerator _questionGenerator;
         public NoteService(ILogger<NoteService> logger, INoteRepository noteRepository, IMapper mapper, IUserService userService)
         {
             _logger = logger;
@@ -69,6 +69,8 @@ namespace NoteRecall_Application.ServiceImplementation
             }
             var note = _mapper.Map<Note>(noteRequest);
             note.CreatedAt = DateTime.UtcNow;
+            var questions = _questionGenerator.Generate(note);
+            note.Questions = questions;
             await _noteRepository.AddAsync(note);
             await _noteRepository.SaveChangesAsync();
             var noteDto = _mapper.Map<NoteResponseDTO>(note);

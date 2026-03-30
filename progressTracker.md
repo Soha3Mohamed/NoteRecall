@@ -40,4 +40,6 @@ after that?
 - and then add some unit tests for the services and repositories, and then test them using xUnit or any other testing framework.
 - post on linkedin 
 - and then maybe start working on the frontend part of the application using Blazor or any other frontend framework, and then connect it with the backend using API calls.
-- 
+
+================================================
+maybe i can after that take the notes as notion pages and then use the notion api to get the notes and then use them in the application,
