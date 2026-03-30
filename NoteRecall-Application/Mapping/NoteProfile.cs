@@ -7,7 +7,7 @@ using System.Text;
 
 namespace NoteRecall_Application.Mapping
 {
-    internal class NoteProfile : Profile
+    public class NoteProfile : Profile
     {
         public NoteProfile()
         {

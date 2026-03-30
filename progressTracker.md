@@ -43,3 +43,16 @@ after that?
 
 ================================================
 maybe i can after that take the notes as notion pages and then use the notion api to get the notes and then use them in the application,
+
+==========Active Recall steps===============
+-okay so first i made an interface for IQuestionGenerator in infrastrucure but i couldn't use it in application so i moved it 
+to Core but implemented the interface in infrastructure
+-i used the generate method in note service when a new note is created the generator is called and passes questions to the note to 
+prepare it for the first review session
+- now i need to create a sentence splitter where i will use string formatting and simple NLP to take a note and return a chunks of sentences 
+that i can generate questions from
+- you can think of this like the lexican analyzer i studied when you were in college (it was a hard course ) but any way the goal of it 
+ is to take a code and turn it into tokens and keywords for the parser after that to start understanding meaningful instructions
+- where to put the sentence splitter class?????
+
+============================================
