@@ -1,12 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NoteRecall_Application;
+using NoteRecall_Application.Mapping;
+using NoteRecall_Core.Common;
 using NoteRecall_Infrastructure.Contexts;
 using NoteRecall_Infrastructure.Extensions;
+using NoteRecall_Infrastructure.Services.QuestionsGenration;
 using Serilog;
 using System.Text;
-using NoteRecall_Application.Mapping;
-using Microsoft.Extensions.Options;
 //using Microsoft.OpenApi.Models;
 
 
@@ -44,6 +46,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
 
+builder.Services.AddScoped<SentenceSplitter>();
+builder.Services.AddScoped<ImportantSentencePicker>();
+builder.Services.AddScoped<IQuestionGenerator, FakeQuestionGenerator>();
 
 
 #region add authentication schema 

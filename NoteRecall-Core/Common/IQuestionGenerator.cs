@@ -7,6 +7,6 @@ namespace NoteRecall_Core.Common
 {
     public interface IQuestionGenerator
     {
-        List<Question> Generate(Note note);
+        List<Question> Generate(string noteContent);
     }
 }
