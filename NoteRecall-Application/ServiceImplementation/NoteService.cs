@@ -18,12 +18,16 @@ namespace NoteRecall_Application.ServiceImplementation
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly IQuestionGenerator _questionGenerator;
-        public NoteService(ILogger<NoteService> logger, INoteRepository noteRepository, IMapper mapper, IUserService userService)
+        private readonly IReviewSessionRepository _reviewSessionRepository;
+
+        public NoteService(ILogger<NoteService> logger, INoteRepository noteRepository, IMapper mapper, IUserService userService, IQuestionGenerator questionGenerator, IReviewSessionRepository reviewSessionRepository)
         {
             _logger = logger;
             _noteRepository = noteRepository;
             _mapper = mapper;
             _userService = userService;
+            _questionGenerator = questionGenerator;
+            _reviewSessionRepository = reviewSessionRepository;
         }
 
         public async Task<ServiceResult<NoteResponseDTO>> GetNoteByIdAsync(int id)
@@ -69,10 +73,12 @@ namespace NoteRecall_Application.ServiceImplementation
             }
             var note = _mapper.Map<Note>(noteRequest);
             note.CreatedAt = DateTime.UtcNow;
-            var questions = _questionGenerator.Generate(note);
+            var questions = _questionGenerator.Generate(note.Content);
             note.Questions = questions;
             await _noteRepository.AddAsync(note);
+            await _reviewSessionRepository.AddAsync(new ReviewSession { NoteId = note.Id, UserId = userId, SessionDate = DateTime.UtcNow.AddDays(1) });
             await _noteRepository.SaveChangesAsync();
+            await _reviewSessionRepository.SaveChangesAsync();
             var noteDto = _mapper.Map<NoteResponseDTO>(note);
             return ServiceResult<NoteResponseDTO>.Ok(noteDto);
 

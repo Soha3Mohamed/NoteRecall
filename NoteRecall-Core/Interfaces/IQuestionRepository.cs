@@ -13,6 +13,6 @@ namespace NoteRecall_Core.Interfaces
         Task UpdateQuestionAsync(Question question);
         Task DeleteQuestionAsync(int questionId);
         Task SaveChangesAsync();
-
+        Task<List<Question>> GetDueQuestionsAsync();
     }
 }

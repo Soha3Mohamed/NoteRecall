@@ -48,5 +48,10 @@ namespace NoteRecall_Infrastructure.Repositories
         {
             await _context.SaveChangesAsync();
         }
+
+        public Task<List<Question>> GetDueQuestionsAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

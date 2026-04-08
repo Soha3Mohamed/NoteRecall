@@ -1,4 +1,6 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NoteRecall_Application;
@@ -49,7 +51,7 @@ builder.Services.AddApplicationServices();
 builder.Services.AddScoped<SentenceSplitter>();
 builder.Services.AddScoped<ImportantSentencePicker>();
 builder.Services.AddScoped<IQuestionGenerator, FakeQuestionGenerator>();
-
+builder.Services.AddScoped<SpacedRepetitionService>();
 
 #region add authentication schema 
 //add authentication schema 
@@ -103,7 +105,10 @@ builder.Services.AddSwaggerGen(c =>
 
 #endregion
 
-builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
+//builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddAutoMapper(cfg => {
+    cfg.AddProfile<UserProfile>(); // optional, can scan assemblies instead
+}, typeof(UserProfile).Assembly);
 
 
 var app = builder.Build();

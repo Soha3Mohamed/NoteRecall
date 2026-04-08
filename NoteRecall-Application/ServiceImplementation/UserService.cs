@@ -135,7 +135,7 @@ namespace NoteRecall_Application.ServiceImplementation
         {
             var user = await _userRepository.GetByEmailAsync(email);
 
-            if (user == null || PasswordHasher.VerifyPassword(password, user.PasswordHash))
+            if (user == null || !PasswordHasher.VerifyPassword(user.PasswordHash, password))
             {
                 _logger.LogWarning("Authentication failed for email {Email}", email);
                 return ServiceResult<string>.Fail("Authentication Failed, Credentials don't match");
