@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoteRecall_Infrastructure.Contexts;
 
@@ -11,9 +12,11 @@ using NoteRecall_Infrastructure.Contexts;
 namespace NoteRecall_Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260408020202_addQuestionProgressEntity")]
+    partial class addQuestionProgressEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,8 +114,6 @@ namespace NoteRecall_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuestionId");
-
                     b.ToTable("QuestionProgresses");
                 });
 
@@ -209,24 +210,11 @@ namespace NoteRecall_Infrastructure.Migrations
 
             modelBuilder.Entity("NoteRecall_Core.Entities.Question", b =>
                 {
-                    b.HasOne("NoteRecall_Core.Entities.Note", "Note")
+                    b.HasOne("NoteRecall_Core.Entities.Note", null)
                         .WithMany("Questions")
                         .HasForeignKey("NoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Note");
-                });
-
-            modelBuilder.Entity("NoteRecall_Core.Entities.QuestionProgress", b =>
-                {
-                    b.HasOne("NoteRecall_Core.Entities.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("NoteRecall_Core.Entities.ReviewResult", b =>

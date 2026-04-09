@@ -21,8 +21,10 @@ namespace NoteRecall_Application.ServiceImplementation
         private readonly IQuestionRepository _questionRepo;
         private readonly SpacedRepetitionService _spacedRepetitionService;
         private readonly IReviewResultRepository _reviewResultRepo;
+        private readonly IQuestionProgressRepository _questionprogressRepo;
+        private readonly IReviewResultRepository _reviewResultRepository;
 
-        public ReviewSessionService(ILogger<UserService> logger, IReviewSessionRepository reviewSessionRepository, IMapper mapper, IUserRepository userRepository, IQuestionRepository questionRepo, SpacedRepetitionService spacedRepetitionService, IReviewResultRepository reviewResultRepo)
+        public ReviewSessionService(ILogger<UserService> logger, IReviewSessionRepository reviewSessionRepository, IMapper mapper, IUserRepository userRepository, IQuestionRepository questionRepo, SpacedRepetitionService spacedRepetitionService, IReviewResultRepository reviewResultRepo, IQuestionProgressRepository questionprogressRepo, IReviewResultRepository reviewResultRepository)
         {
             _logger = logger;
             _reviewSessionRepository = reviewSessionRepository;
@@ -31,6 +33,8 @@ namespace NoteRecall_Application.ServiceImplementation
             _questionRepo = questionRepo;
             _spacedRepetitionService = spacedRepetitionService;
             _reviewResultRepo = reviewResultRepo;
+            _questionprogressRepo = questionprogressRepo;
+            _reviewResultRepository = reviewResultRepository;
         }
 
         public async Task<ServiceResult<ReviewSessionResponseDTO>> GetReviewSessionByIdAsync(int reviewSessionId)
@@ -60,6 +64,62 @@ namespace NoteRecall_Application.ServiceImplementation
 
         }
 
+        public async Task AnswerQuestionAsync(int questionId, int quality, int userId)
+        {
+            // 1. Get progress
+            var progress = await _questionprogressRepo.GetByQuestionIdAsync(questionId);
+
+            if (progress == null)
+                throw new Exception("Progress not found");
+
+            // 2. Save ReviewResult (history)
+            var reviewSession = await _reviewSessionRepository.GetLatestByUserIdAsync(userId);
+
+            if (reviewSession == null)
+            {
+                reviewSession = new ReviewSession
+                {
+                    UserId = userId,
+                    SessionDate = DateTime.UtcNow
+                };
+
+                await _reviewSessionRepository.AddAsync(reviewSession);
+            }
+
+            var result = new ReviewResult
+            {
+                QuestionId = questionId,
+                ReviewSessionId = reviewSession.Id,
+                SelfScore = quality
+            };
+
+            await _reviewResultRepository.AddAsync(result);
+
+            // 3. UPDATE SPACED REPETITION
+
+            progress.EaseFactor = progress.EaseFactor +
+                (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+
+            if (quality < 3)
+                progress.Interval = 1;
+            else if (progress.Interval == 0)
+                progress.Interval = 1;
+            else if (progress.Interval == 1)
+                progress.Interval = 6;
+            else
+                progress.Interval = (int)(progress.Interval * progress.EaseFactor);
+
+            progress.NextReviewDate = DateTime.UtcNow.AddDays(progress.Interval);
+
+            // 4. Save progress
+            await _questionprogressRepo.UpdateAsync(progress);
+        }
+
+        public async Task<List<Question>> GetDueQuestionsAsync(int userId)
+        {
+            return await _questionprogressRepo.GetDueQuestionsAsync(userId);
+        }
+
         //public Task<ServiceResult<ReviewSessionResponseDTO>> AddReviewSessionAsync(ReviewSessionRequestDTO reviewSessionRequest)
         //{
         //    throw new NotImplementedException();
@@ -76,28 +136,28 @@ namespace NoteRecall_Application.ServiceImplementation
         //    throw new NotImplementedException();
         //}
 
-        public async Task<ServiceResult<ReviewResultResponseDTO>> SubmitAnswer(int sessionId, int questionId, int score)
-        {
-            var question = await _questionRepo.GetQuestionByIdAsync(questionId);
+        //public async Task<ServiceResult<ReviewResultResponseDTO>> SubmitAnswer(int sessionId, int questionId, int score)
+        //{
+        //    var question = await _questionRepo.GetQuestionByIdAsync(questionId);
 
-            // 1. Save result
-            var result = new ReviewResult
-            {
-                QuestionId = questionId,
-                ReviewSessionId = sessionId,
-                SelfScore = score
-            };
+        //    // 1. Save result
+        //    var result = new ReviewResult
+        //    {
+        //        QuestionId = questionId,
+        //        ReviewSessionId = sessionId,
+        //        SelfScore = score
+        //    };
 
-            await _reviewResultRepo.AddAsync(result);
+        //    await _reviewResultRepo.AddAsync(result);
 
-            // 2. Update spaced repetition
-            _spacedRepetitionService.UpdateSchedule(question, score);
+        //    // 2. Update spaced repetition
+        //    _spacedRepetitionService.UpdateSchedule(question, score);
 
-            // 3. Save updated question
-            await _questionRepo.UpdateQuestionAsync(question);
+        //    // 3. Save updated question
+        //    await _questionRepo.UpdateQuestionAsync(question);
 
-            var reviewSessionDto = _mapper.Map<ReviewResultResponseDTO>(result);
-            return ServiceResult<ReviewResultResponseDTO>.Ok(reviewSessionDto);
-        }
+        //    var reviewSessionDto = _mapper.Map<ReviewResultResponseDTO>(result);
+        //    return ServiceResult<ReviewResultResponseDTO>.Ok(reviewSessionDto);
+        //}
     }
 }

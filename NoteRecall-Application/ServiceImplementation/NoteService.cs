@@ -19,8 +19,9 @@ namespace NoteRecall_Application.ServiceImplementation
         private readonly IUserService _userService;
         private readonly IQuestionGenerator _questionGenerator;
         private readonly IReviewSessionRepository _reviewSessionRepository;
+        private readonly IQuestionProgressRepository _questionProgressRepository;
 
-        public NoteService(ILogger<NoteService> logger, INoteRepository noteRepository, IMapper mapper, IUserService userService, IQuestionGenerator questionGenerator, IReviewSessionRepository reviewSessionRepository)
+        public NoteService(ILogger<NoteService> logger, INoteRepository noteRepository, IMapper mapper, IUserService userService, IQuestionGenerator questionGenerator, IReviewSessionRepository reviewSessionRepository, IQuestionProgressRepository questionProgressRepository)
         {
             _logger = logger;
             _noteRepository = noteRepository;
@@ -28,6 +29,7 @@ namespace NoteRecall_Application.ServiceImplementation
             _userService = userService;
             _questionGenerator = questionGenerator;
             _reviewSessionRepository = reviewSessionRepository;
+            _questionProgressRepository = questionProgressRepository;
         }
 
         public async Task<ServiceResult<NoteResponseDTO>> GetNoteByIdAsync(int id)
@@ -71,17 +73,45 @@ namespace NoteRecall_Application.ServiceImplementation
                 _logger.LogWarning("User with id {UserId} not found.", userId);
                 return ServiceResult<NoteResponseDTO>.Fail("User not found.");
             }
+
             var note = _mapper.Map<Note>(noteRequest);
             note.CreatedAt = DateTime.UtcNow;
+
+            // I will generate questions
             var questions = _questionGenerator.Generate(note.Content);
             note.Questions = questions;
+
+            // then save note and questuions to the database so i can have the question ids to create question progress
+            // for each question and also to create review session for that note
             await _noteRepository.AddAsync(note);
-            await _reviewSessionRepository.AddAsync(new ReviewSession { NoteId = note.Id, UserId = userId, SessionDate = DateTime.UtcNow.AddDays(1) });
             await _noteRepository.SaveChangesAsync();
+
+            // Create questionProgress
+            foreach (var question in note.Questions)
+            {
+                await _questionProgressRepository.AddAsync(new QuestionProgress
+                {
+                    QuestionId = question.Id,
+                    EaseFactor = 2.5,
+                    Interval = 0,
+                    NextReviewDate = DateTime.UtcNow.AddDays(1)
+                });
+            }
+
+            await _questionProgressRepository.SaveChangesAsync();
+
+            // Create reviewSession
+            await _reviewSessionRepository.AddAsync(new ReviewSession
+            {
+                NoteId = note.Id,
+                UserId = userId,
+                SessionDate = DateTime.UtcNow
+            });
+
             await _reviewSessionRepository.SaveChangesAsync();
+
             var noteDto = _mapper.Map<NoteResponseDTO>(note);
             return ServiceResult<NoteResponseDTO>.Ok(noteDto);
-
         }
         public async Task<ServiceResult<NoteResponseDTO>> UpdateNoteAsync(int userId, NoteUpdateDTO noteRequest)
         {

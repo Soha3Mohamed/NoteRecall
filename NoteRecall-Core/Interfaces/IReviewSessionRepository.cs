@@ -11,6 +11,7 @@ namespace NoteRecall_Core.Interfaces
         Task<IEnumerable<ReviewSession>> GetByUserIdAsync(int userId);
         Task AddAsync(ReviewSession reviewSession);
         Task UpdateAsync(ReviewSession reviewSession);
+        Task<ReviewSession?> GetLatestByUserIdAsync(int userId);
         Task DeleteAsync(int id);
         Task SaveChangesAsync();
     }

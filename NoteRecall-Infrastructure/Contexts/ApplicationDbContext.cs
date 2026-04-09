@@ -16,6 +16,7 @@ namespace NoteRecall_Infrastructure.Contexts
         public DbSet<Question> Questions { get; set; }
         public DbSet<ReviewSession> ReviewSessions { get; set; }
         public DbSet<ReviewResult> ReviewResults { get; set; }
+        public DbSet<QuestionProgress> QuestionProgresses { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

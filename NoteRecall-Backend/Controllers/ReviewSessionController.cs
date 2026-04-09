@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NoteRecall_Application.DTOs;
 using NoteRecall_Application.DTOs.QuestionDTOs;
 using NoteRecall_Application.DTOs.ReviewSessionDTOs;
 using NoteRecall_Application.ServiceInterfaces;
@@ -40,6 +41,25 @@ namespace NoteRecall_Backend.Controllers
                 return NotFound(result);
 
             return Ok(result);
+        }
+        [HttpPost("answer")]
+        public async Task<IActionResult> AnswerQuestion(int userId, [FromBody] AnswerDto dto)
+        {
+           // var userId = GetUserId(); // from JWT
+
+            await _reviewSessionService.AnswerQuestionAsync(dto.QuestionId, dto.Quality, userId);
+
+            return Ok();
+        }
+
+        [HttpGet("due")]
+        public async Task<IActionResult> GetDueQuestions(int userId)
+        {
+            //var userId = GetUserId();
+
+            var questions = await _reviewSessionService.GetDueQuestionsAsync(userId);
+
+            return Ok(questions);
         }
     }
 }

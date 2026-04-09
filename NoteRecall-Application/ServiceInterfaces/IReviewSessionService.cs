@@ -12,10 +12,15 @@ namespace NoteRecall_Application.ServiceInterfaces
     {
         Task<ServiceResult<ReviewSessionResponseDTO>> GetReviewSessionByIdAsync(int reviewSessionId);
         Task<ServiceResult<IEnumerable<ReviewSessionResponseDTO>>> GetReviewSessionsByUserIdAsync(int userId);
+        Task<List<Question>> GetDueQuestionsAsync(int userId);
+
         //Task<ServiceResult<ReviewSessionResponseDTO>> AddReviewSessionAsync(ReviewSessionRequestDTO reviewSessionRequest);
         //Task<ServiceResult<ReviewSessionResponseDTO>> UpdateReviewSessionRequestAsync(ReviewSessionRequestDTO reviewSessionRequest);
         //Task<ServiceResult<bool>> DeleteReviewSessionRequestAsync(int reviewSessionId);
-        Task<ServiceResult<ReviewResultResponseDTO>> SubmitAnswer(int sessionId, int questionId, int score);
-        
+
+        //  Task<ServiceResult<ReviewResultResponseDTO>> SubmitAnswer(int sessionId, int questionId, int score);
+
+        Task AnswerQuestionAsync(int questionId, int quality, int userId);
+
     }
 }

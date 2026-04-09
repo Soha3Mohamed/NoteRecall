@@ -16,6 +16,7 @@ namespace NoteRecall_Application
             services.AddScoped<INoteService, NoteService>();
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IReviewSessionService, ReviewSessionService>();
+            
 
 
         }

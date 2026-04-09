@@ -14,6 +14,7 @@ namespace NoteRecall_Core.Entities
         
         public int Id { get; set; }
         public int NoteId { get; set; }
+        public Note Note { get; set; }  // 🔥 ADD THIS
         public string QuestionText { get; set; }
         public string ExpectedAnswerText { get; set; }
         public DateTime NextReviewDate { get; set; }

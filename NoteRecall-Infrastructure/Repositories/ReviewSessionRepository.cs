@@ -43,6 +43,14 @@ namespace NoteRecall_Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<ReviewSession?> GetLatestByUserIdAsync(int userId)
+        {
+            return await _context.ReviewSessions
+                .Where(r => r.UserId == userId)
+                .OrderByDescending(r => r.SessionDate)
+                .FirstOrDefaultAsync();
+        }
         public async Task SaveChangesAsync()
         {
            await _context.SaveChangesAsync();

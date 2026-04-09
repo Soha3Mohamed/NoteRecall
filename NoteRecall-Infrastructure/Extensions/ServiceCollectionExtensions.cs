@@ -17,6 +17,7 @@ namespace NoteRecall_Infrastructure.Extensions
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IReviewSessionRepository, ReviewSessionRepository>();
             services.AddScoped<IReviewResultRepository, ReviewResultRepository>();
+            services.AddScoped<IQuestionProgressRepository, QuestionProgressRepository>();
 
             // Add other infrastructure services as needed
         }
